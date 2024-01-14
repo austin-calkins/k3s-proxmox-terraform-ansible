@@ -63,3 +63,8 @@ variable "networkrange" {
 variable "gateway" {
   default = "192.168.3.1"
 }
+
+variable "vm_disk_size" {
+  description = "the initial disk size of each node"
+  default = "30G"
+}

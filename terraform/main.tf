@@ -9,6 +9,12 @@ resource "proxmox_vm_qemu" "proxmox_vm_master" {
   cores       = 4
 
   ipconfig0 = "ip=${var.master_ips[count.index]}/${var.networkrange},gw=${var.gateway}"
+  scsihw      = "virtio-scsi-pci"
+  disk {
+        size    = var.vm_disk_size
+        storage = "local-lvm"
+        type    = "scsi"
+    }
 
   lifecycle {
     ignore_changes = [
@@ -27,12 +33,18 @@ resource "proxmox_vm_qemu" "proxmox_vm_workers" {
   target_node = var.pm_node_name
   clone       = var.tamplate_vm_name
   os_type     = "cloud-init"
+  boot = "order=scsi0;ide2;net0"
   agent       = 1
   memory      = var.num_k3s_nodes_mem
   cores       = 4
 
   ipconfig0 = "ip=${var.worker_ips[count.index]}/${var.networkrange},gw=${var.gateway}"
-
+  scsihw      = "virtio-scsi-pci"
+  disk {
+        size    = var.vm_disk_size
+        storage = "local-lvm"
+        type    = "scsi"
+    }
   lifecycle {
     ignore_changes = [
       ciuser,

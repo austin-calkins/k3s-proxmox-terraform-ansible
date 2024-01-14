@@ -2,6 +2,12 @@
 
 This is based on the great work that <https://github.com/itwars> done with Ansible, all I left to do is to put it all together with terraform and Proxmox!
 
+## Notes for my setup
+* setup variables.tfvars pointing to one of the existing templates you already have on proxmox
+* run terraform apply to create the cluster
+* update ansible config variables generated from terraform script
+* run site ansible instructions below to provision the cluster
+
 ## System requirements
 
 * The deployment environment must have Ansible 2.4.0+
