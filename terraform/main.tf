@@ -3,6 +3,7 @@ resource "proxmox_vm_qemu" "proxmox_vm_master" {
   name        = "k3s-master-${count.index}"
   target_node = var.pm_node_name
   clone       = var.tamplate_vm_name
+  onboot      = true 
   os_type     = "cloud-init"
   agent       = 1
   memory      = var.num_k3s_masters_mem
@@ -14,6 +15,11 @@ resource "proxmox_vm_qemu" "proxmox_vm_master" {
         size    = var.vm_disk_size
         storage = "local-lvm"
         type    = "scsi"
+    }
+  # VM Network Settings
+    network {
+        bridge = "vmbr0"
+        model  = "virtio"
     }
 
   lifecycle {
@@ -32,6 +38,7 @@ resource "proxmox_vm_qemu" "proxmox_vm_workers" {
   name        = "k3s-worker-${count.index}"
   target_node = var.pm_node_name
   clone       = var.tamplate_vm_name
+  onboot      = true 
   os_type     = "cloud-init"
   boot = "order=scsi0;ide2;net0"
   agent       = 1
@@ -44,6 +51,11 @@ resource "proxmox_vm_qemu" "proxmox_vm_workers" {
         size    = var.vm_disk_size
         storage = "local-lvm"
         type    = "scsi"
+    }
+  # VM Network Settings
+    network {
+        bridge = "vmbr0"
+        model  = "virtio"
     }
   lifecycle {
     ignore_changes = [
